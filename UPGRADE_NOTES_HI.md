@@ -46,3 +46,10 @@ Before production use, deploy the frontend and test imports with a small non-sen
 - Parsed/transpiled all JSX files with the installed TypeScript compiler without syntax diagnostics.
 - Ran `node --check` on backend JavaScript files successfully.
 - `npm install` / `vite build` could not be completed in this runtime because npm registry DNS requests failed (`EAI_AGAIN`); Netlify must still confirm a successful clean production build.
+
+## Platform / AI billing additions
+- Added platform Super Admin bootstrap via `SUPER_ADMIN_USERNAME` and `SUPER_ADMIN_PASSWORD`.
+- Added organization creation with its own backend admin and organization-scoped leads, users, inventory, tasks, settings and AI balance. Legacy records without an organization ID stay in `default`.
+- Added 100 non-expiring free credits per organization, 3 credits per successful AI insight, credit balance/ledger and Razorpay order/signature verification. Failed AI requests refund the reserved credits.
+- Added mobile bottom navigation, quick-add lead for calling members, tab-aware browser Back, and employee drill-down performance metrics.
+- Configure Razorpay and Super Admin credentials on the backend host before enabling live operations. Package pricing is a starting configuration and should be reconciled with actual OpenAI token usage.

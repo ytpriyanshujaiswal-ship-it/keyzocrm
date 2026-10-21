@@ -62,7 +62,7 @@ For an existing account, log in with your current credentials. Change demo crede
 - API security headers, configurable CORS, active-account checks on authenticated requests, 7-day JWT expiry, and lead patch validation.
 - Responsive global layout and updated CRM palette.
 - Smart lead imports support .xlsx/.xls/.csv/.txt, common header mapping, preview, invalid-row handling, and duplicate-phone skipping.
-- Mobile navigation is available from a top-right hamburger on every screen, including Inventory, Tasks & Visits, Assistants and Reports.
+- Mobile navigation includes bottom tabs (calling team has a center quick-add lead button; backend has four main tabs) plus a top-right hamburger for advanced modules. Browser Back now returns between visited tabs rather than directly logging out.
 - Reports & analytics shows lead pipeline, conversion rate, sources, projects, follow-up/site-visit task counts, and CSV export.
 
 5) POST-DEPLOYMENT SMOKE TEST
@@ -78,7 +78,16 @@ For an existing account, log in with your current credentials. Change demo crede
 9. Restart/redeploy the backend and confirm the test project/task/lead remain.
 10. Delete test records if needed and rotate temporary account credentials.
 
-6) OPTIONAL INTEGRATIONS
+6) ORGANIZATIONS, AI CREDITS AND PAYMENTS
+----------------------------------------
+- Configure SUPER_ADMIN_USERNAME and SUPER_ADMIN_PASSWORD on Render (use a unique username and a password of at least 12 characters) to create the platform Super Admin. Keep this account separate from organization logins.
+- Super Admin can create organizations and their first organization admin. New organizations receive 100 non-expiring AI credits and have isolated users, leads, properties, tasks and message templates. Legacy records without an organizationId remain in the Default Organization.
+- Each successful AI lead-insight request costs 3 credits. The system reserves credits while the provider responds; failed/network/empty responses restore the reservation and do not create a usage transaction. AI is blocked if fewer than 3 credits remain.
+- Razorpay checkout is implemented with server-side order creation and payment-signature verification. Configure RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET on Render; never expose the secret in frontend code or commit it to GitHub.
+- Starter credit tiers: ₹499/500 credits, ₹999/1,100 credits, ₹1,999/2,400 credits, ₹4,999/6,500 credits and ₹9,999/14,000 credits. These are initial configured tiers; validate real OpenAI token costs before production pricing because input/output sizes vary by response.
+- Free and purchased credits do not expire. The 100 free credits are granted once per organization, not on each login or redeploy.
+
+7) OPTIONAL INTEGRATIONS
 ------------------------
 AI lead insights:
   OPENAI_API_KEY=<server-side secret>
@@ -91,7 +100,7 @@ WhatsApp Business Platform:
   WHATSAPP_API_VERSION=v23.0
 Use a valid Meta Business setup, opt-in recipients, and approved message templates where required. Tokens must only exist in backend environment variables, never in frontend code. If these variables are absent, the integrations page clearly shows setup is required.
 
-7) BACKUPS
+8) BACKUPS
 -----------
 Run from the server directory with DATABASE_URL configured:
   npm install
@@ -101,7 +110,7 @@ Restore only when you have verified the backup file and understand that --force 
   node backup-tool.js import backup.json --force
 Keep encrypted copies of backups in a private location; never upload customer data backups to public GitHub.
 
-8) MOBILE APP (LATER PHASE)
+9) MOBILE APP (LATER PHASE)
 ---------------------------
 The UI is responsive, but this is still a web application. Once the hosted web version passes the smoke tests, evaluate PWA installation first; Capacitor can package the same web app for Android/iOS if native distribution is needed. This ZIP does not claim to be an already-published mobile app.
 
