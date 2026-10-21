@@ -61,6 +61,9 @@ For an existing account, log in with your current credentials. Change demo crede
 - Persistent PostgreSQL tables for properties and tasks; these are included in backup/restore exports.
 - API security headers, configurable CORS, active-account checks on authenticated requests, 7-day JWT expiry, and lead patch validation.
 - Responsive global layout and updated CRM palette.
+- Smart lead imports support .xlsx/.xls/.csv/.txt, common header mapping, preview, invalid-row handling, and duplicate-phone skipping.
+- Mobile navigation is available from a top-right hamburger on every screen, including Inventory, Tasks & Visits, Assistants and Reports.
+- Reports & analytics shows lead pipeline, conversion rate, sources, projects, follow-up/site-visit task counts, and CSV export.
 
 5) POST-DEPLOYMENT SMOKE TEST
 -----------------------------
@@ -68,10 +71,12 @@ For an existing account, log in with your current credentials. Change demo crede
 2. Sign in with an existing Backend account.
 3. Open Team; verify no passwords are displayed; create one temporary Frontend/Sales account.
 4. Add a test lead, assign it, sign in as that sales user, and confirm only assigned leads are visible.
-5. Open Inventory; add a test project and change its availability.
-6. Open Tasks & Visits; create a site visit, mark it complete, refresh, and confirm it persists.
-7. Restart/redeploy the backend and confirm the test project/task/lead remain.
-8. Delete test records if needed and rotate temporary account credentials.
+5. Open Reports; confirm pipeline/source/project metrics and export a test CSV.
+6. On a phone-sized viewport, open the top-right hamburger from every panel and verify that all modules and logout are accessible.
+7. Import a small .xlsx test sheet with Name, Mobile, Project, Location, Source, Email and Budget columns; confirm preview, import, and duplicate skips.
+8. Open Tasks & Visits; create a site visit, mark it complete, refresh, and confirm it persists.
+9. Restart/redeploy the backend and confirm the test project/task/lead remain.
+10. Delete test records if needed and rotate temporary account credentials.
 
 6) OPTIONAL INTEGRATIONS
 ------------------------
@@ -99,3 +104,6 @@ Keep encrypted copies of backups in a private location; never upload customer da
 8) MOBILE APP (LATER PHASE)
 ---------------------------
 The UI is responsive, but this is still a web application. Once the hosted web version passes the smoke tests, evaluate PWA installation first; Capacitor can package the same web app for Android/iOS if native distribution is needed. This ZIP does not claim to be an already-published mobile app.
+
+
+Final validation note: Smart Lead Import uses the package name `xlsx` resolved to the security-maintained @keep-lts/xlsx npm fork via npm alias. Run `npm install`, `npm test`, and `npm run build` in CI/Netlify before production use. In this environment, import-unit tests and syntax checks passed; the full production build could not be run because npm registry access failed (EAI_AGAIN).
